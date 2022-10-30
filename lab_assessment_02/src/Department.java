@@ -1,3 +1,4 @@
+package src.lab_assessment_02;
 
 public class Department {
     private String name;

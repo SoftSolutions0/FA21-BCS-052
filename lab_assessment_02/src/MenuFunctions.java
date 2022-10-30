@@ -1,12 +1,15 @@
-public class MenuFunctions {
+package src.lab_assessment_02;
 
+public class MenuFunctions {
     private SideFunctions sf = new SideFunctions();
     private Department main;
 
+    // constructors
     public MenuFunctions(Department main) {
         this.main = main;
     }
 
+    public MenuFunctions() {}
     public void addNewPC() {
 
         // checking if at least one lab exists or not
@@ -58,6 +61,12 @@ public class MenuFunctions {
 
                     for (int counter = 0; counter < found.lab.getPcCounter(); counter++) {
                         sf.println(found.lab.getComputers()[counter].toString());
+
+                        sf.println("Installed Softwares on the System...");
+
+                        for (String software : found.lab.getInstalledSoftwares()) {
+                            sf.println(software);
+                        }
                     }
                     sf.println("=========================================");
                 }
@@ -221,30 +230,35 @@ public class MenuFunctions {
         }
     }
 
-    public void createMultipleLabs() {
+    public void createMultipleComputers() {
         // creating multiple copies of same entry
 
-        if (main.getLabCounter() == main.getNumberOfLabs()) {
-            sf.println("Number of labs exceeded");
+        sf.print("Enter lab in which you want to add multiple copies of same data: ");
+        String lab = sf.takeString();
+
+        SideFunctions.LabSearch ls = sf.searchLab(lab, main.getLabs(), main.getLabCounter());
+
+        if (!ls.isFound) {
+            sf.println("Lab could not be found...");
         } else {
 
             sf.print("Enter how many copies you want to make: ");
             int num = sf.takeInt();
 
             int innerCounter = 0;
-            Lab newLab = sf.takeLab();
+            PC newPC = sf.takePC();
 
             do {
 
-                main.getLabs()[main.getLabCounter()] = newLab;
+                ls.lab.getComputers()[ls.lab.getPcCounter()] = newPC;
 
                 // incrementing in the lab counter to add new labs in
-                main.setLabCounter(main.getLabCounter() + 1);
+                ls.lab.setPcCounter(ls.lab.getPcCounter() + 1);
 
                 innerCounter++;
 
             } while (innerCounter != num);
-            sf.println("New Labs Added Successfully");
+            sf.println("New Computers Added Successfully");
         }
     }
 
@@ -256,4 +270,9 @@ public class MenuFunctions {
     public Department getDepartment() {
         return main;
     }
+
+    public void setDepartment(Department dep) {
+        this.main = dep;
+    }
+
 }
